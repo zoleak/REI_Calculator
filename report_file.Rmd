@@ -1,0 +1,268 @@
+---
+title: "Real Estate Investment Report"
+#output: html_document
+output: 
+  flexdashboard::flex_dashboard:
+    vertical_layout: scroll
+   # orientation: rows
+params:
+    text1: NA
+    pic1: NA
+    text2: NA
+    Unit1: NA
+    Unit2: NA
+    Unit3: NA
+    Unit4: NA
+    Unit5: NA
+    Pet: NA
+    Garage: NA
+    Storage: NA
+    Utility: NA
+    Other: NA
+    Principal: NA
+    Interest: NA
+    Taxes: NA
+    Insurance: NA
+    PMI: NA
+    Vacancy: NA
+    Capex: NA
+    Mait: NA
+    Repairs: NA
+    Loan: NA
+    Rate: NA
+    Loan_term: NA
+    Purchase: NA
+    Rehab: NA
+    Down: NA
+    Closing: NA
+---
+<style>
+.value {
+        color: green;
+}
+
+.value-box {
+  width: 300px;
+}
+
+.caption {
+  font-weight: bold;
+
+}
+#column > pre:nth-child(5) > code{
+  color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+
+}
+
+#column > pre:nth-child(6) > code{
+  color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+
+}
+
+#column > pre:nth-child(7) > code{
+  color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+
+}
+
+#column > pre:nth-child(8) > code{
+color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+
+}
+
+#column > pre:nth-child(9) > code{
+color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+
+}
+
+#column > pre:nth-child(10) > code{
+color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+
+}
+
+#column > pre:nth-child(11) > code{
+color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+
+}
+
+#column > pre:nth-child(14) > code{
+color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+}
+
+#column > pre:nth-child(15) > code{
+color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+}
+#column > pre:nth-child(16) > code{
+color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+}
+#column > pre:nth-child(17) > code{
+color: black;
+  font-weight: bold;
+  font-family: 'Aclonica';font-size: 18px;
+}
+</style>
+
+
+
+
+```{r include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(comment = NA)
+
+```
+Column
+-------------------------------------
+
+```{r,echo=FALSE,warning=FALSE,results='asis'}
+writeLines(params[["text2"]])
+```
+
+```{r, results='asis',echo=FALSE,warning=FALSE} 
+knitr::include_graphics(params[["pic1"]])
+```
+
+```{r, results='asis',echo=FALSE,warning=FALSE}
+writeLines(params[["text1"]])
+writeLines(paste("Rental Income:",
+                 total_income<-params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+params$Pet+params$Garage+params$Storage+params$Utility+params$Other))
+
+```
+***
+Loan Details:
+```{r}
+writeLines(paste("Down Payment:","$",params$Purchase*(params$Down/100)))
+writeLines(paste("Total Cash Needed:","$",
+                 
+    
+    inital_investment<-round(params$Purchase*(params$Down/100)+params$Closing+params$Rehab)))
+
+writeLines(paste("Purchase Price:","$",params$Purchase))
+
+writeLines(paste("Loan Amount:","$",params$Loan))
+
+writeLines(paste("Loan Term:",params$Loan_term))
+
+writeLines(paste("Interest Rate:",params$Rate,"%"))
+
+```
+***
+Reserves:
+```{r}
+
+writeLines(paste("Vacancy:",params$Vacancy,"%"))
+writeLines(paste("Repairs & Maintenance:",params$Repairs,"%"))
+writeLines(paste("Capital Expenditures:",params$Capex,"%"))
+writeLines(paste("Management Fees:",params$Mait,"%"))
+                 
+```
+
+
+Column
+-------------------------------------
+### Total Monthly Rental Income
+
+```{r}
+
+total_income<-params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+params$Pet+params$Garage+params$Storage+params$Utility+params$Other
+
+
+  #infoBox("Total Rental Income:",color = "green",
+   #         fill = T)
+  #valueBox(paste("$",total_income),"Total Income",icon = shiny::icon("dollar"))
+  
+```
+
+### Total Monthly Expenses
+```{r}
+
+
+renderValueBox({
+  total_expenses<-params$Principal+params$Interest
+ valueBox(paste("$",total_expenses),"Total Monthly Expenses" ,icon =shiny::icon("fa-thumbs-up"),
+           color = "green")})
+
+```
+
+### Total Monthly Cash Flow
+```{r}
+
+    p= params$Loan
+    j=params$Rate/(12*100)
+    L=params$Loan_term
+    N= L*12
+    
+    te<-round(p*(j/(1-(1+j)^-N)),digits = 2)+params$Taxes+params$Insurance+params$PMI+
+      (params$Repairs/100)*(params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+
+      params$Pet+params$Garage+params$Storage+params$Utility+params$Other)+(params$Vacancy/100)*(params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+                                                                                                                  params$Pet+params$Garage+params$Storage+params$Utility+params$Other)+(params$Capex/100)*
+      (params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+
+         params$Pet+params$Garage+params$Storage+params$Utility+params$Other)+(params$Mait/100)*
+      (params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+
+         params$Pet+params$Garage+params$Storage+params$Utility+params$Other)
+  
+    ti<- params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+
+      params$Pet+params$Garage+params$Storage+params$Utility+params$Other
+    
+    cf<-round((ti-te))
+
+    
+  valueBox(paste("$",cf),"Total Monthly Cash Flow" ,icon =shiny::icon("fa-thumbs-up"),
+           color = "green")
+
+
+```
+
+### COCROI
+```{r}
+#
+#    
+#    p= params$Loan
+#    j=params$Rate/(12*100)
+#    L=params$Loan_term
+#    N= L*12
+#    
+#    te<-round(p*(j/(1-(1+j)^-N)),digits = 2)+params$Taxes+params$Insurance+params$PMI+
+#      (params$Repairs/100)*(params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+
+#      params$Pet+params$Garage+params$Storage+params$Utility+params$Other)+(params$Vacancy/100)*(par#ams$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+                                      #                                                                            #params$Pet+params$Garage+params$Storage+params$Utility+params$Other)+(params$Capex/100)*
+#      (params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+
+#         params$Pet+params$Garage+params$Storage+params$Utility+params$Other)+(params$Mait/100)*
+#      (params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+
+#         params$Pet+params$Garage+params$Storage+params$Utility+params$Other)
+#  
+#    ti<- params$Unit1+params$Unit2+params$Unit3+params$Unit4+params$Unit5+
+#      params$Pet+params$Garage+params$Storage+params$Utility+params$Other
+#    
+#    dp<-params$Purchase*(params$Down/100)
+#    
+#    total_cash<-round(params$Closing+params$Rehab+dp)
+#    
+#    annual_cashflow<-round((ti-te)*12)
+#    
+#    cashoncash<-round((annual_cashflow/total_cash)*100)
+#    
+#      valueBox(paste(cashoncash,"%"))
+#
+#    
+```
+
+
+
+
