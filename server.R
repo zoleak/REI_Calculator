@@ -236,29 +236,29 @@ shinyServer(function(input, output,session) {
     }
   })
 # Creates download button to download report from calculations,etc.
-  file1 <- reactive({gsub("\\\\", "/", input$upload$datapath)})
+  #file1 <- reactive({gsub("\\\\", "/", input$upload$datapath)})
   
-  output$downloadReport <- downloadHandler(
-    filename = 
-      paste("report_file","file",".html",sep=""),
-    content = function(file) {
-      tempReport<-file.path(tempdir(),"report_file.Rmd")
-      file.copy('report_file.Rmd', tempReport,overwrite = TRUE)
-      ##Parameters to pass
-      params <- list(text1=input$descp,pic1=file1(),text2=input$address,
-                     Unit1=input$unit1,Unit2=input$unit2,Unit3=input$unit3,
-                     Unit4=input$unit4,Unit5=input$unit5,Pet=input$pet,Garage=input$garage,
-                     Storage=input$storage,Utility=input$utility_fee,Other=input$other,
-                     Principal = input$princ,Interest = input$inter,Taxes=input$taxes,
-                     Insurance = input$insurance,PMI=input$pmi_dollar,Repairs = input$repairs_mait,
-                     Vacancy = input$vacancy,Capex=input$capex, Mait=input$management,
-                     Loan = input$loan, Rate = input$rate,Loan_term=input$loan_term,
-                     Purchase = input$purchase,Down = input$down,Closing=input$closing,
-                     Rehab = input$rehab_costs)
-      rmarkdown::render(tempReport,output_file=file, params=params,
-                        envir = new.env(parent = globalenv()))
-    }  
-  )
+ # output$downloadReport <- downloadHandler(
+ #   filename = 
+ #     paste("report_file","file",".html",sep=""),
+ #   content = function(file) {
+ #     tempReport<-file.path(tempdir(),"report_file.Rmd")
+ #     file.copy('report_file.Rmd', tempReport,overwrite = TRUE)
+ #     ##Parameters to pass
+ #     params <- list(text1=input$descp,pic1=file1(),text2=input$address,
+ #                    Unit1=input$unit1,Unit2=input$unit2,Unit3=input$unit3,
+ #                    Unit4=input$unit4,Unit5=input$unit5,Pet=input$pet,Garage=input$garage,
+ #                    Storage=input$storage,Utility=input$utility_fee,Other=input$other,
+ #                    Principal = input$princ,Interest = input$inter,Taxes=input$taxes,
+ #                    Insurance = input$insurance,PMI=input$pmi_dollar,Repairs = input$repairs_mait,
+ #                    Vacancy = input$vacancy,Capex=input$capex, Mait=input$management,
+ #                    Loan = input$loan, Rate = input$rate,Loan_term=input$loan_term,
+ #                    Purchase = input$purchase,Down = input$down,Closing=input$closing,
+ #                    Rehab = input$rehab_costs)
+ #     rmarkdown::render(tempReport,output_file=file, params=params,
+ #                       envir = new.env(parent = globalenv()))
+ #   }  
+ # )
   
   mortgage <- function(P = 500000, I = 6, L = 30, amort = TRUE, plotData = TRUE) {
     J <- I / (12 * 100)
