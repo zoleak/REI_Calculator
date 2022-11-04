@@ -26,19 +26,19 @@ shinyUI(navbarPage(theme = shinytheme('superhero'),
   tabPanel("Property Calculations",
            tags$head(
              includeCSS("www/styles.css")),
-           fluidRow(
-             column(width= 3,
-              div(style= "text-align:center",h3("Property Info"))),
-             column(width = 3,
-             textInput("address","Address:",placeholder = "35 Wilson Ave Parlin NJ 08859")),
-             column(width = 3,
-            textInput("descp","Description:",placeholder = "This duplex style colonial has all the 
-                      amenities you can ask for and is within walking distance to the 
-                      downtown shops and restaurants.")),
-            column(width =3,
-            fileInput("upload", "Upload image:", accept = c("image/png",
-                                                            "image/jpeg",
-                                                            "image/pdf")))),hr(),
+           #fluidRow(
+           #  column(width= 3,
+            ##  div(style= "text-align:center",h3("Property Info"))),
+            # column(width = 3,
+            # textInput("address","Address:",placeholder = "35 Wilson Ave Parlin NJ 08859")),
+            # column(width = 3,
+           # textInput("descp","Description:",placeholder = "This duplex style colonial has all the 
+           #           amenities you can ask for and is within walking distance to the 
+            #          downtown shops and restaurants.")),
+          #  column(width =3,
+           # fileInput("upload", "Upload image:", accept = c("image/png",
+            #                                                "image/jpeg",
+            #                                                "image/pdf")))),hr(),
   column(width = 3,
          h3("Purchase Info"),
          numericInputIcon("purchase",

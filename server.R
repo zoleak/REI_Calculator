@@ -343,12 +343,14 @@ shinyServer(function(input, output,session) {
                                 lengthChange = TRUE,
                                 dom = "Blrtip",
                                 buttons = c("copy", "csv", "excel", "pdf", "print"),
-                                
                                 lengthMenu = list(c(-1, 10, 12, 15, 25, 50, 100), c("All", "10", "12", "15", "25", "50", "100"))
                               ),
-                              rownames = FALSE
-    ) %>%
-      formatCurrency(c("Balance", "Payment", "Principal", "Interest"), currency = "", interval = 3, mark = ",")
+                              rownames = FALSE)%>%
+      formatStyle('Month',
+                  target = "row",
+                  backgroundColor = 'white', fontWeight = 'bold')%>%
+      formatStyle(columns = colnames(aDFmonth), color = "black")%>%
+    formatCurrency(c("Balance", "Payment", "Principal", "Interest"), currency = "", interval = 3, mark = ",")
   })
   
   #output$plot1<-renderPlot({
