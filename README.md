@@ -2,8 +2,12 @@
 <img width="1286" alt="featured" src="https://user-images.githubusercontent.com/36116239/202075303-c9f94168-129e-4871-bc1a-3061959c8da5.png">
 
 ## Overview
-As an active real estate investor, I know how critical it is to run your numbers. Buying your investment property at the right price is one of the most significant aspects of investing. In many cases, it can be the difference between success and failure. This dashboard was created to guide investors' buying decisions. Users can enter their purchase information, mortage details, projected income, expenses and calculate their projected cashflow/cash on cash return. This dashboard was created using the R shiny package.
+This web application was created to assist real estate investors in making informed buying decisions. As a real estate investor myself, I understand the importance of accurately calculating expenses and projected income in order to determine the potential cash flow and return on investment.
+
+With this application, users can enter key details such as purchase price, mortgage details, projected income and expenses. The app will then calculate projected cash flow and cash on cash return, helping investors to evaluate the potential profitability of their investment.
 ## How to use?
-This shiny dashboard can be used at the following website: [REI Calculator](https://kzolea695.shinyapps.io/REI_Calculator/)
+To use the application, simply follow the link to the [REI Calculator](https://kzolea695.shinyapps.io/REI_Calculator/) and input your desired investment information. The app will automatically calculate your projected cash flow and return on investment.
 ## Future work
-Moving forward, I'd like to add more calculations to the application so users can enhance their decision-making. Also, I'd like to create an option where the application can generate a report so users can share their calculations with others.
+In the future, I plan to add more calculations to the application to provide users with even more insights and decision-making support. I am also considering the addition of a report generation feature to allow users to easily share their calculations with others.
+
+Thank you for using the Real Estate Investment Calculator, and happy investing!
