@@ -43,80 +43,61 @@ observeEvent(c(input$pmi, input$loan), {
 })
 # Gets rent total 
   output$output <- renderText({
-    paste("$",input$unit1+input$unit2+input$unit3+input$unit4+input$unit5)
-  })
-# Gets other income total 
-  output$output2 <- renderText({
-    paste("$",input$pet+input$garage+input$storage+input$utility_fee+input$other)
-  })
-# Gets total gross income   
-  output$output3 <- renderText({
-    req(input$unit1)
-    req(input$unit2)
-    req(input$unit3)
-    req(input$unit4)
-    req(input$unit5)
-    req(input$pet)
-    req(input$garage)
-    req(input$storage)
-    req(input$utility_fee)
-    req(input$other)
-
-   paste("$",total_rent<-input$unit1+input$unit2+input$unit3+input$unit4+input$unit5+
-           input$pet+input$garage+input$storage+input$utility_fee+input$other)
-    
-  })
-# Estimates monthly mortgage payment  
-  output$debt_payment<-renderText({
-    req(input$loan)
-    req(input$rate)
-    req(input$loan_term)
-    req(input$taxes)
-    req(input$insurance)
-    req(input$pmi_dollar)
-    
-    p= input$loan
-    j=input$rate/(12*100)
-    L=input$loan_term
-    N= L*12
-    
-    paste("$",round(round(p*(j/(1-(1+j)^-N)),digits = 2)+input$taxes+input$insurance+input$pmi_dollar))
-
-    })
-# Gets total reserves
-  output$output_reserves <- renderText({
-    paste("$",(input$repairs_mait/100)*(input$unit1+input$unit2+input$unit3+input$unit4+input$unit5+
-      input$pet+input$garage+input$storage+input$utility_fee+input$other)+(input$vacancy/100)*(input$unit1+input$unit2+input$unit3+input$unit4+input$unit5+
-      input$pet+input$garage+input$storage+input$utility_fee+input$other)+(input$capex/100)*
-      (input$unit1+input$unit2+input$unit3+input$unit4+input$unit5+
-      input$pet+input$garage+input$storage+input$utility_fee+input$other)+(input$management/100)*
-      (input$unit1+input$unit2+input$unit3+input$unit4+input$unit5+
-      input$pet+input$garage+input$storage+input$utility_fee+input$other))
-    
+    paste("$", sum(input[, paste0("unit", 1:5)]))
   })
   
-# Reactive UI based on action button 
-  observeEvent(input$extra_ex, {
-    insertUI(
-      selector = "#extra_ex",
-      where = "beforeBegin",
-      ui = numericInput("txt", "Other",input$extra_ex,
-                     0)
-    )
+  # Gets other income total 
+  output$output2 <- renderText({
+    paste("$", sum(input[, c("pet", "garage", "storage", "utility_fee", "other")]))
   })
-# Gets total expenses  
-  output$total_expenses<-renderText({
-    req(input$loan)
-    req(input$rate)
-    req(input$loan_term)
-    req(input$taxes)
-    req(input$insurance)
-    req(input$pmi_dollar)
+  
+  # Gets total gross income   
+  output$output3 <- renderText({
+    req(input[, c("unit1", "unit2", "unit3", "unit4", "unit5", "pet", "garage", "storage", "utility_fee", "other")])
     
-    p= input$loan
-    j=input$rate/(12*100)
-    L=input$loan_term
-    N= L*12
+    total_rent <- sum(input[, paste0("unit", 1:5)]) + 
+                  sum(input[, c("pet", "garage", "storage", "utility_fee", "other")])
+    
+    paste("$", total_rent)
+  })
+  
+  # Estimates monthly mortgage payment  
+  output$debt_payment <- renderText({
+    req(input[, c("loan", "rate", "loan_term", "taxes", "insurance", "pmi_dollar")])
+    
+    p = input$loan
+    j = input$rate / (12 * 100)
+    L = input$loan_term
+    N = L * 12
+    
+    paste("$", round(round(p * (j / (1 - (1 + j)^-N)), digits = 2) + input$taxes + input$insurance + input$pmi_dollar))
+  })
+# Gets total reserves
+output$output_reserves <- renderText({
+  req(input[, c("repairs_mait", "vacancy", "capex", "management")])
+  
+  total_income <- sum(input[, paste0("unit", 1:5)]) + sum(input[, c("pet", "garage", "storage", "utility_fee", "other")])
+  total_reserves <- (input$repairs_mait/100 + input$vacancy/100 + input$capex/100 + input$management/100) * total_income
+  
+  paste("$", total_reserves)
+})
+
+# Reactive UI based on action button 
+observeEvent(input$extra_ex, {
+  insertUI(
+    selector = "#extra_ex",
+    where = "beforeBegin",
+    ui = numericInput("txt", "Other", input$extra_ex, 0)
+  )
+})
+# Gets total expenses  
+output$total_expenses<-renderText({
+  req(input[, c("loan", "rate", "loan_term", "taxes", "insurance", "pmi_dollar", "repairs_mait", "vacancy", "capex", "management")])
+  
+  p = input$loan
+  j = input$rate/(12*100)
+  L = input$loan_term
+  N = L*12
     
    paste("$",round(round(p*(j/(1-(1+j)^-N)),digits = 2)+input$taxes+input$insurance+input$pmi_dollar+
       (input$repairs_mait/100)*(input$unit1+input$unit2+input$unit3+input$unit4+input$unit5+
