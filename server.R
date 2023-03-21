@@ -4,29 +4,20 @@ library(rmarkdown)
 library(ggplot2)
 
 # Define server logic 
-shinyServer(function(input, output,session) {
+shinyServer(function(input, output, session) {
   
-# Updates loan amount based on purchase price input
-  observe({
-    req(input$purchase)
-    req(input$down)
-    loan_amount<- input$purchase*(1-input$down/100)
-    
-    updateNumericInput(session,"loan",value=loan_amount)
+  # Updates loan amount based on purchase price input
+  observeEvent(c(input$purchase, input$down), {
+    loan_amount <- input$purchase * (1 - input$down / 100)
+    updateNumericInput(session, "loan", value = loan_amount)
   })
-#Interest amount
-  observe({
-    req(input$loan)
-    req(input$loan_term)
-    req(input$rate)
-    req(input$payments_per)
-    
-    interest_dollar<-round((input$rate/100)/input$payments_per*input$loan)
-    
-    updateNumericInput(session,"inter",value=interest_dollar)
-    
-    
+  
+  # Calculates interest amount
+  observeEvent(c(input$loan, input$loan_term, input$rate, input$payments_per), {
+    interest_dollar <- round((input$rate / 100) / input$payments_per * input$loan)
+    updateNumericInput(session, "inter", value = interest_dollar)
   })
+})
 #Principal amount
   observe({
     req(input$loan)
