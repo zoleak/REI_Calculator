@@ -18,36 +18,29 @@ shinyServer(function(input, output, session) {
     updateNumericInput(session, "inter", value = interest_dollar)
   })
 })
-#Principal amount
-  observe({
-    req(input$loan)
-    req(input$loan_term)
-    req(input$rate)
-    req(input$payments_per)
-    
-    p= input$loan
-    j=input$rate/(12*100)
-    L=input$loan_term
-    N= L*12
-    
-    estimated_pay<-round(p*(j/(1-(1+j)^-N)),digits = 2)
-    
-    interest_dollar<-round((input$rate/100)/input$payments_per*input$loan)
-    
-    principal_dollar<- round(estimated_pay-interest_dollar)
-    
-    updateNumericInput(session,"princ",value=principal_dollar)
-    
-    
-  })
+# Principal amount
+observeEvent(c(input$loan, input$loan_term, input$rate, input$payments_per), {
+  # Get input values and calculate estimated monthly payment
+  p <- input$loan
+  j <- input$rate / (12 * 100)
+  L <- input$loan_term
+  N <- L * 12
+  estimated_pay <- round(p * (j / (1 - (1 + j)^-N)), digits = 2)
+  
+  # Calculate interest and principal amounts
+  interest_dollar <- round((input$rate / 100) / input$payments_per * input$loan)
+  principal_dollar <- round(estimated_pay - interest_dollar)
+  
+  # Update principal input field
+  updateNumericInput(session, "princ", value = principal_dollar)
+})
+
 # Gets PMI amount based on % of PMI rate  
-  observe({
-    req(input$pmi)
-    req(input$loan)
-    pmi_show<- round(input$loan*(input$pmi/100/12),digits = 2)
-    
-    updateNumericInput(session,"pmi_dollar",value=pmi_show)
-  })
+observeEvent(c(input$pmi, input$loan), {
+  # Calculate PMI amount and update input field
+  pmi_show <- round(input$loan * (input$pmi / 100 / 12), digits = 2)
+  updateNumericInput(session, "pmi_dollar", value = pmi_show)
+})
 # Gets rent total 
   output$output <- renderText({
     paste("$",input$unit1+input$unit2+input$unit3+input$unit4+input$unit5)
